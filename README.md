@@ -78,7 +78,7 @@ Para clonar y ejecutar este proyecto en su máquina local, siga estos pasos:
 
 1. **Clonar el Repositorio:**
    ```
-   git clone https://ruta-del-repositorio.git
+   git clone  https://github.com/miusarname2/prueba-php
    ```
 
 2. **Instalar Dependencias:**
