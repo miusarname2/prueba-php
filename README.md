@@ -121,10 +121,47 @@ Para clonar y ejecutar este proyecto en su máquina local, siga estos pasos:
 Para crear la base de datos del proyecto, ejecute los siguientes comandos SQL:
 
 ```sql
-CREATE DATABASE nombre_de_la_base_de_datos;
-```
+CREATE TABLE empresa (id SERIAL PRIMARY KEY,identificacion VARCHAR(16) NOT NULL,razonsocial VARCHAR(256) NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
-Reemplace `nombre_de_la_base_de_datos` con el nombre que desee para su base de datos.
+CREATE TABLE tipodocumento (
+    id SERIAL PRIMARY KEY,
+    descripcion VARCHAR(256) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE estado (
+    id SERIAL PRIMARY KEY,
+    descripcion VARCHAR(256) NOT NULL,
+    exitoso BOOLEAN DEFAULT TRUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE numeracion (
+    id SERIAL PRIMARY KEY,
+    idtipodocumento INTEGER REFERENCES tipodocumento(id),
+    idempresa INTEGER REFERENCES empresa(id),
+    prefijo VARCHAR(8) NOT NULL,
+    consecutivoinicial INTEGER NOT NULL,
+    consecutivofinal INTEGER NOT NULL,
+    vigenciainicial DATE NOT NULL,
+    vigenciafinal DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE documento (
+    id SERIAL PRIMARY KEY,
+    idnumeracion INTEGER NOT NULL REFERENCES numeracion(id),
+    idestado INTEGER NOT NULL REFERENCES estado(id),
+    numero INTEGER NOT NULL,
+    fecha DATE NOT NULL,
+    base DECIMAL(8,2) NOT NULL,
+    impuestos DECIMAL(8,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+```
 
 ### Poblando la Base de Datos
 
