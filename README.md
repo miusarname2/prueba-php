@@ -168,12 +168,46 @@ CREATE TABLE documento (
 Para poblar la base de datos con nuevos registros, puede utilizar los siguientes comandos SQL como ejemplo:
 
 ```sql
-INSERT INTO Empresa (nombre) VALUES ('Empresa A'), ('Empresa B'), ('Empresa C');
-INSERT INTO TipoDocumento (tipo) VALUES ('Factura'), ('Nota Débito'), ('Nota Crédito');
-INSERT INTO Numeracion (empresa_id, tipo_documento_id, consecutivo, vigencia_desde, vigencia_hasta) VALUES
-(1, 1, 1000, '2023-01-01', '2023-12-31'),
-(1, 2, 2000, '2023-01-01', '2023-12-31'),
-(2, 1, 3000, '2023-01-01', '2023-12-31');
+-- Agregar tipos de documento
+INSERT INTO tipodocumento (id, descripcion, created_at, updated_at)
+VALUES (1, 'Nota Débito', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (2, 'Nota Crédito', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (3, 'Factura', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Agregar estados de documentos
+INSERT INTO estado (id, descripcion, exitoso, created_at, updated_at)
+VALUES (1, 'Recibido', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (2, 'Entregado', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (3, 'No Entregado', FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (4, 'Regresado', FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (5, 'Procesado', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (6, 'No Leído', FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (7, 'Respondido', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Crear empresas
+INSERT INTO empresa (id, identificacion, razonsocial, created_at, updated_at)
+VALUES (1, '3232dfdf', 'Campuslands', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (2, 'dfsdf5', 'Ucc', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (3, '343455d', 'Majorel', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Crear numeraciones
+INSERT INTO numeracion (id, idtipodocumento, idempresa, prefijo, consecutivoinicial, consecutivofinal, vigenciainicial, vigenciafinal, created_at, updated_at)
+VALUES (1, 1, 1, 'ABC123', 1000, 9999, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 year', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (2, 2, 2, 'XYZ456', 1000, 9999, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 year', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (3, 3, 3, 'XYZ' || FLOOR(RANDOM() * 1000)::TEXT, 1000, 9999, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 year', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (4, 3, 1, 'XYZ' || FLOOR(RANDOM() * 1000)::TEXT, 1000, 9999, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 year', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (5, 2, 3, 'XYZ' || FLOOR(RANDOM() * 1000)::TEXT, 1000, 9999, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 year', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (6, 1, 2, 'XYZ' || FLOOR(RANDOM() * 1000)::TEXT, 1000, 9999, CURRENT_DATE, CURRENT_DATE + INTERVAL '1 year', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Crear documentos
+INSERT INTO documento (id, idnumeracion, idestado, numero, fecha, base, impuestos, created_at, updated_at)
+VALUES (1, 1, 1, 1234, CURRENT_DATE, 100.00, 15.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (2, 2, 2, 2345, CURRENT_DATE, 150.00, 20.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (3, 3, 3, 3456, CURRENT_DATE, 150.00, 20.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (4, 4, 4, 4567, CURRENT_DATE, 150.00, 20.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (5, 5, 5, 5678, CURRENT_DATE, 150.00, 20.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (6, 6, 6, 6789, CURRENT_DATE, 151.00, 22.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 ```
 
 Estos son ejemplos simples y puede ajustarlos según sus necesidades y el modelo de su base de datos.
